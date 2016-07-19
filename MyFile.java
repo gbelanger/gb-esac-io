@@ -22,48 +22,46 @@ public class MyFile extends File {
     public int bufferSize = 4096;
 
 
-    public MyFile(File _myfile) throws IOException {
-	super(_myfile.getCanonicalPath());
+    public MyFile(File myfile) throws IOException {
+	super(myfile.getCanonicalPath());
 	this.offSelect();
     }
 
-    public MyFile(String _filename) throws IOException {
-	super(_filename);
+    public MyFile(String filename) throws IOException {
+	super(filename);
 	this.offSelect();
     }
 
-
-
-    public static void fileList(Vector _myFileList, String _path) {
+    public static void fileList(Vector<MyFile> myFileList, String path) {
 	// Routine that scans and lists all dirs 
-	// and files recursively from the input _path
-	// and fills _myFileList with MyFile objects
+	// and files recursively from the input path
+	// and fills myFileList with MyFile objects
 	try {
-	    MyFile myfile = new MyFile(_path);
+	    MyFile myfile = new MyFile(path);
 	    MyFile[] files = myfile.listMyFiles();
 	    for ( int i=0; i < files.length; i++ ) {
 		if ( files[i].isDirectory() ) {
-		    if ( !(files[i].getCanonicalPath()).equals(_path) ) 
-			fileList(_myFileList, files[i].getCanonicalPath());
+		    if ( !(files[i].getCanonicalPath()).equals(path) ) 
+			fileList(myFileList, files[i].getCanonicalPath());
 		}
 		if ( files[i].isFile() || files[i].isDirectory() ) 
-		    _myFileList.addElement(files[i]);
-		//if ( !files[i].isLink() ) _myFileList.addElement(files[i]);
+		    myFileList.addElement(files[i]);
+		//if ( !files[i].isLink() ) myFileList.addElement(files[i]);
 	    }
 	}
 	catch(IOException e) {System.out.println(e);}
 	return;
     }
 
-    public static Vector selectFiles(Vector _myFileList, String pattern) {
+    public static Vector selectFiles(Vector<MyFile> myFileList, String pattern) {
 	// Routine that selects files given 2 args:
 	//// 1) Vector of MyFile objects,
 	//// 2) String argument for the filename of files to search for
-	Vector selectedFilesList = new Vector();
-	for (int i=0; i < _myFileList.size(); i++) {
-	    String filename = ((MyFile) _myFileList.elementAt(i)).getName();
+	Vector<MyFile> selectedFilesList = new Vector<MyFile>();
+	for (int i=0; i < myFileList.size(); i++) {
+	    String filename = ((MyFile) myFileList.elementAt(i)).getName();
 	    if ( filename.contains(pattern) ) 
-		selectedFilesList.addElement(_myFileList.elementAt(i));
+		selectedFilesList.addElement(myFileList.elementAt(i));
 	}
 	return selectedFilesList;
     }
@@ -213,10 +211,10 @@ public class MyFile extends File {
 	catch (IOException e) {return false;}
     }
 
-    public boolean chmod(int _mod) {
+    public boolean chmod(int mod) {
 	try {
 	    String[] chmod_cmd 
-		= new String[]{"chmod", (new Integer(_mod)).toString(), this.getCanonicalPath()};
+		= new String[]{"chmod", (new Integer(mod)).toString(), this.getCanonicalPath()};
 	    Runtime rt = Runtime.getRuntime();
 	    Process p = rt.exec(chmod_cmd);
 	    int rc = -1;

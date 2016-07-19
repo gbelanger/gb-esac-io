@@ -105,8 +105,8 @@ public class AsciiDataFileReader {
 	//  Initialize the buffered reader
 	BufferedReader br = new BufferedReader(new FileReader(this.file), bufferSize);
 	//  Get the data from the file
-	ArrayList headerLinesArrayList = new ArrayList();
-	ArrayList dataLinesArrayList = new ArrayList();
+	ArrayList<String> headerLinesArrayList = new ArrayList<String>();
+	ArrayList<String> dataLinesArrayList = new ArrayList<String>();
 	IntArrayList nColsPerDataRowIntList = new IntArrayList();
 	while ( true ) {  	
 	    //  Read the line while there is data to be read
