@@ -16,8 +16,8 @@ import org.apache.log4j.Logger;
 /**
  * The class <code>AsciiDataFileWriter</code> is used to write data as ASCI files in QDP format.
  *
- * @author <a href="mailto: guilaume.belanger@esa.int">Guillaume Belanger</a>
- * @version 1.0 (June 2010, ESAC)
+ * @author <a href="mailto: guilaume.belanger@esa.int">Guillaume Belanger, ESA, ESAC</a>
+ * @version April 2017 (last modified)
  */
 public class AsciiDataFileWriter {
 
@@ -25,138 +25,148 @@ public class AsciiDataFileWriter {
     private static Logger logger  = Logger.getLogger(AsciiDataFileWriter.class);
     private PrintWriter printWriter;
     private static DecimalFormat stats = new DecimalFormat("0.00E00");
-    private static DecimalFormat number = new DecimalFormat("0.000");
+    private static DecimalFormat label = new DecimalFormat("0.000");
 
     //  Constructor
-    public AsciiDataFileWriter(String filename) throws IOException {
+    public AsciiDataFileWriter(final String filename) throws IOException {
 	int bufferSize = 256000;
   	printWriter = new PrintWriter(new BufferedWriter(new FileWriter(filename), bufferSize));
     }
 
     //  Methods writeHisto for interface IHistogram1D
 
-    public void writeHisto(IHistogram1D iHisto, String xLabel) {
+    public void writeHisto(final IHistogram1D iHisto, final String xLabel) {
 	writeHisto((Histogram1D) iHisto, xLabel);
     }
 
-    public void writeHisto(IHistogram1D iHisto, String xLabel, boolean showStats) {
+    public void writeHisto(final IHistogram1D iHisto, final String xLabel, final boolean showStats) {
 	writeHisto((Histogram1D) iHisto, xLabel, showStats);
     }
 
-    public void writeHisto(IHistogram1D iHisto, String xLabel, String yLabel, boolean showStats) {
+    public void writeHisto(final IHistogram1D iHisto, final String xLabel, final String yLabel) {
+	writeHisto((Histogram1D) iHisto, xLabel, yLabel);
+    }
+
+    public void writeHisto(final IHistogram1D iHisto, final String xLabel, final String yLabel, final boolean showStats) {
 	writeHisto((Histogram1D) iHisto, xLabel, yLabel, showStats);
     }
 
-    public void writeHisto(IHistogram1D iHisto, String xLabel, String yLabel, String plotLabel) {
+    public void writeHisto(final IHistogram1D iHisto, final String xLabel, final String yLabel, final String plotLabel) {
 	writeHisto((Histogram1D) iHisto, xLabel, yLabel, plotLabel);
     }
 
-    public void writeHisto(IHistogram1D iHisto, String xLabel, String yLabel, String plotLabel, boolean showStats) {
+    public void writeHisto(final IHistogram1D iHisto, final String xLabel, final String yLabel, final String plotLabel, final boolean showStats) {
 	writeHisto((Histogram1D) iHisto, xLabel, yLabel, plotLabel, showStats);
     }
 
-    public void writeHisto(IHistogram1D iHisto, double yMin, double yMax, String xLabel) {
+    public void writeHisto(final IHistogram1D iHisto, final double yMin, final double yMax, final String xLabel) {
 	writeHisto((Histogram1D) iHisto, yMin, yMax, xLabel);
     }
 
-    public void writeHisto(IHistogram1D iHisto, double yMin, double yMax, String xLabel, boolean showStats) {
+    public void writeHisto(final IHistogram1D iHisto, final double yMin, final double yMax, final String xLabel, final boolean showStats) {
 	writeHisto((Histogram1D) iHisto, yMin, yMax, xLabel, showStats);
     }
 
-    public void writeHisto(IHistogram1D iHisto, double[] function, String xLabel) {
+    public void writeHisto(final IHistogram1D iHisto, final double[] function, final String xLabel) {
 	writeHisto((Histogram1D) iHisto, function, xLabel);
     }
 
-    public void writeHisto(IHistogram1D iHisto, double[] function, String xLabel, boolean showStats) {
+    public void writeHisto(final IHistogram1D iHisto, final double[] function, final String xLabel, final boolean showStats) {
 	writeHisto((Histogram1D) iHisto, function, xLabel, showStats);
     }
 
-    public void writeHisto(IHistogram1D iHisto, double[] function, String xLabel, String yLabel, boolean showStats) {
+    public void writeHisto(final IHistogram1D iHisto, final double[] function, final String xLabel, final String yLabel, final boolean showStats) {
 	writeHisto((Histogram1D) iHisto, function, xLabel, yLabel, showStats);
     }
 
-    public void writeHisto(IHistogram1D iHisto, double[] function, String xLabel, String yLabel, String plotLabel) {
+    public void writeHisto(final IHistogram1D iHisto, final double[] function, final String xLabel, final String yLabel, final String plotLabel) {
 	writeHisto((Histogram1D) iHisto, function, xLabel, yLabel, plotLabel);
     }
 
-    public void writeHisto(IHistogram1D iHisto, double[] function, String xLabel, String yLabel, String plotLabel, boolean showStats) {
+    public void writeHisto(final IHistogram1D iHisto, final double[] function, final String xLabel, final String yLabel, final String plotLabel, final boolean showStats) {
 	writeHisto((Histogram1D) iHisto, function, xLabel, yLabel, plotLabel, showStats);
     }
 
 
     //  Methods writeHisto for class Histogram1D
 
-    public void writeHisto(Histogram1D histo, String xLabel) {
+    public void writeHisto(final Histogram1D histo, final String xLabel) {
 	boolean showStats = true;
 	writeHisto(histo, xLabel, showStats);
     }
 
-    public void writeHisto(Histogram1D histo, String xLabel, boolean showStats) {
+    public void writeHisto(final Histogram1D histo, final String xLabel, final boolean showStats) {
 	String[] header = makeHistoHeader(histo, xLabel, showStats);
 	double[][] data = getData(histo);
 	printToFile(header, data[0], data[1]);
     }
 
-    public void writeHisto(Histogram1D histo, String xLabel, String yLabel, boolean showStats) {
-	String plotLabel = "";
-	writeHisto(histo, xLabel, yLabel, plotLabel, showStats);
+    public void writeHisto(final Histogram1D histo, final String xLabel, final String yLabel) {
+	boolean showStats = true;
+	writeHisto(histo, xLabel, yLabel, showStats);
+    }
+    
+    public void writeHisto(final Histogram1D histo, final String xLabel, final String yLabel, final boolean showStats) {
+	String[] header = makeHistoHeader(histo, xLabel, yLabel, showStats);
+	double[][] data = getData(histo);
+	printToFile(header, data[0], data[1]);
     }
 
-    public void writeHisto(Histogram1D histo, String xLabel, String yLabel, String plotLabel) {
+    public void writeHisto(final Histogram1D histo, final String xLabel, final String yLabel, final String plotLabel) {
 	boolean showStats = true;	
 	writeHisto(histo, xLabel, yLabel, plotLabel, showStats);
     }
 
-    public void writeHisto(Histogram1D histo, String xLabel, String yLabel, String plotLabel, boolean showStats) {
+    public void writeHisto(final Histogram1D histo, final String xLabel, final String yLabel, final String plotLabel, final boolean showStats) {
 	String[] header = makeHistoHeader(histo, xLabel, yLabel, plotLabel, showStats);
 	double[][] data = getData(histo); 
 	printToFile(header, data[0], data[1]);
     }
 
-    public void writeHisto(Histogram1D histo, double yMin, double yMax, String xLabel) {
+    public void writeHisto(final Histogram1D histo, final double yMin, final double yMax, final String xLabel) {
 	boolean showStats = true;
 	writeHisto(histo, yMin, yMax, xLabel, showStats);
     }
 
-    public void writeHisto(Histogram1D histo, double yMin, double yMax, String xLabel, boolean showStats) {
+    public void writeHisto(final Histogram1D histo, final double yMin, final double yMax, final String xLabel, final boolean showStats) {
 	String[] header = makeHistoHeader(histo, yMin, yMax, xLabel, showStats);
 	double[][] data = getData(histo); 
 	printToFile(header, data[0], data[1]);
     }
 
-    public void writeHisto(Histogram1D histo, double[] function, String xLabel) {
+    public void writeHisto(final Histogram1D histo, final double[] function, final String xLabel) {
 	boolean showStats = true;
 	writeHisto(histo, function, xLabel, showStats);
     }
 
-    public void writeHisto(Histogram1D histo, double[] function, String xLabel, boolean showStats) {
+    public void writeHisto(final Histogram1D histo, final double[] function, final String xLabel, final boolean showStats) {
 	String yLabel = "Entries per bin";
 	writeHisto(histo, function, xLabel, yLabel, showStats);
     }
 
-    public void writeHisto(Histogram1D histo, double[] function, String xLabel, String yLabel) {
+    public void writeHisto(final Histogram1D histo, final double[] function, final String xLabel, final String yLabel) {
 	boolean showStats = true;
 	writeHisto(histo, function, xLabel, yLabel, showStats);
     }
 
-    public void writeHisto(Histogram1D histo, double[] function, String xLabel, String yLabel, boolean showStats) {
+    public void writeHisto(final Histogram1D histo, final double[] function, final String xLabel, final String yLabel, final boolean showStats) {
 	String[] header = makeHistoHeader(histo, xLabel, yLabel, showStats);
 	double[][] data = getData(histo);
 	printToFile(header, data[0], data[1], function);
     }
 
-    public void writeHisto(Histogram1D histo, double[] function, String xLabel, String yLabel, String plotLabel) {
+    public void writeHisto(final Histogram1D histo, final double[] function, final String xLabel, final String yLabel, final String plotLabel) {
 	boolean showStats = true;
 	writeHisto(histo, function, xLabel, yLabel, plotLabel, showStats);
     }
 
-    public void writeHisto(Histogram1D histo, double[] function, String xLabel, String yLabel, String plotLabel, boolean showStats) {
+    public void writeHisto(final Histogram1D histo, final double[] function, final String xLabel, final String yLabel, final String plotLabel, final boolean showStats) {
 	String[] header = makeHistoHeader(histo, xLabel, yLabel, plotLabel, showStats);
 	double[][] data = getData(histo);
 	printToFile(header, data[0], data[1], function);
     }
 
-    public void writeCorrPlot(double[] x, double[] y, String xLabel, String yLabel) {
+    public void writeCorrPlot(final double[] x, final double[] y, final String xLabel, final String yLabel) {
 	double[] correlationCoeff = BasicStats.getCorrelationCoefficient(x, y);
 	double r = correlationCoeff[0];
 	double rSigma = correlationCoeff[1];
@@ -164,7 +174,7 @@ public class AsciiDataFileWriter {
 	printToFile(header, x, y);
     }
 
-    // public void writeCorrPlot(double[] x, double[] y, double[] yErr, String xLabel, String yLabel) {
+    // public void writeCorrPlot(final double[] x, final double[] y, final double[] yErr, final String xLabel, final String yLabel) {
     // 	double[] correlationCoeff = BasicStats.getCorrelationCoefficient(x, y);
     // 	double r = correlationCoeff[0];
     // 	double rSigma = correlationCoeff[1];
@@ -172,7 +182,7 @@ public class AsciiDataFileWriter {
     // 	printToFile(header, x, y);
     // }
 
-    public void writeCorrPlot(double[] x, double[] y, String xLabel, String yLabel, double[] xRange, double[] yRange, boolean logX, boolean logY) {
+    public void writeCorrPlot(final double[] x, final double[] y, final String xLabel, final String yLabel, final double[] xRange, final double[] yRange, final boolean logX, final boolean logY) {
 	double[] correlationCoeff = BasicStats.getCorrelationCoefficient(x, y);
 	double r = correlationCoeff[0];
 	double rSigma = correlationCoeff[1];
@@ -183,7 +193,7 @@ public class AsciiDataFileWriter {
 
     //  Utility methods
 
-    public static double[][] getData(Histogram1D histo) {
+    public static double[][] getData(final Histogram1D histo) {
 	IAxis axis = histo.axis();
 	int nBins = axis.bins();
 	double[] binHeights = new double[nBins];
@@ -195,11 +205,11 @@ public class AsciiDataFileWriter {
 	return new double[][] {binCentres, binHeights};
     }
     
-    public static double[][] getData(IHistogram1D iHisto) {
+    public static double[][] getData(final IHistogram1D iHisto) {
 	return getData((Histogram1D) iHisto);
     }
 
-    private double[] calculateYMinYMax(Histogram1D histo) {
+    private double[] calculateYMinYMax(final Histogram1D histo) {
 	// 	double maxBinHeight = histo.maxBinHeight();
 	// 	double minBinHeight = histo.minBinHeight();
 	// 	double max = Math.ceil(maxBinHeight/5d)*5d;
@@ -221,7 +231,26 @@ public class AsciiDataFileWriter {
 
     //  Make header methods
 
-    public static String[] makeHeader(String xLabel, String yLabel, String plotLabel) {
+    public static String[] makeHeaderWithYErrors(final String xLabel, final String yLabel) {
+	String[] header = new String[] {
+	    "DEV /XS",
+	    "READ SERR 2",
+	    "LAB T", "LAB F",
+	    "TIME OFF",
+	    "LINE STEP",
+	    "MA 17 ON", "MA SIZE 1",
+	    "LW 4", "CS 1.1",
+	    "LAB X "+xLabel,
+	    "LAB Y "+yLabel,
+	    "VIEW 0.1 0.2 0.9 0.8",
+	    "SKIP SINGLE",
+	    "!"
+	};
+	return header;
+    }
+
+    
+    public static String[] makeHeader(final String xLabel, final String yLabel, final String plotLabel) {
 	String[] header = new String[] {
 	    "DEV /XS",
 	    "LAB T", "LAB F",
@@ -240,7 +269,7 @@ public class AsciiDataFileWriter {
 	return header;
     }
 
-    public static String[] makeHeader(String xLabel, String yLabel) {
+    public static String[] makeHeader(final String xLabel, final String yLabel) {
 	String[] header = new String[] {
 	    "DEV /XS",
 	    "LAB T", "LAB F",
@@ -257,26 +286,28 @@ public class AsciiDataFileWriter {
 	return header;
     }
 
-    public static String[] makeCorrPlotHeader(String xLabel, String yLabel, double rho, double rhoErr) {
+    public static String[] makeCorrPlotHeader(final String xLabel, final String yLabel, final double rho, final double rhoErr) {
 	String[] header = new String[] {
 		"DEV /XS",
 		"LAB T", "LAB F",
 		"TIME OFF",
 		"LINE OFF",
-		"MA 1 ON",
-		"MA SIZE 2",
-		"LW 3", "CS 1.3",
-		"VIEW 0.1 0.1 0.9 0.9",
+		"MA 17 ON",
+		"MA SIZE 1.75",
+		"LW 4", "CS 1.3",
+		"VIEW 0.2 0.1 0.8 0.9",
 		"LAB X "+xLabel,
 		"LAB Y "+yLabel,
-		"LAB 1 VPOS 0.2 0.8 \"\\gr = "+number.format(rho)+" +/- "+number.format(rhoErr)+"\"",
+		"LAB 100 VPOS 0.25 0.83 \"Correlation Coefficient:\"",
+		"LAB 100 JUST LEFT",		
+		"LAB 1 VPOS 0.3 0.78 \"\\gr = "+label.format(rho)+" +/- "+label.format(rhoErr)+"\"",
 		"LAB 1 JUST LEFT",
 		"!"
 	};
 	return header;
     }
 
-    public static String[] makeCorrPlotHeader(String xLabel, String yLabel, double rho, double rhoErr, double[] xRange, double[] yRange, boolean logX, boolean logY) {
+    public static String[] makeCorrPlotHeader(final String xLabel, final String yLabel, final double rho, final double rhoErr, final double[] xRange, final double[] yRange, final boolean logX, final boolean logY) {
 	String logXValue = "OFF";
 	String logYValue = "OFF";
 	if ( logX ) logXValue="ON";
@@ -286,13 +317,15 @@ public class AsciiDataFileWriter {
 		"LAB T", "LAB F",
 		"TIME OFF",
 		"LINE OFF",
-		"MA 1 ON",
-		"MA SIZE 2",
-		"LW 3", "CS 1.3",
-		"VIEW 0.1 0.1 0.9 0.9",
+		"MA 17 ON",
+		"MA SIZE 1.75",
+		"LW 4", "CS 1.3",
+		"VIEW 0.2 0.1 0.8 0.9",
 		"LAB X "+xLabel,
 		"LAB Y "+yLabel,
-		"LAB 1 VPOS 0.2 0.8 \"\\gr = "+number.format(rho)+" +/- "+number.format(rhoErr)+"\"",
+		"LAB 100 VPOS 0.25 0.83 \"Correlation Coefficient:\"",
+		"LAB 100 JUST LEFT",
+		"LAB 1 VPOS 0.3 0.78 \"\\gr = "+label.format(rho)+" +/- "+label.format(rhoErr)+"\"",
 		"LAB 1 JUST LEFT",
 		"LOG X "+logXValue,
 		"LOG Y "+logYValue,
@@ -305,46 +338,46 @@ public class AsciiDataFileWriter {
 
     // PRIVATE methods
 
-    private String[] makeHistoHeader(Histogram1D histo, String xLabel) {
+    private String[] makeHistoHeader(final Histogram1D histo, final String xLabel) {
 	boolean showStats = true;
 	return makeHistoHeader(histo, xLabel, showStats);
     }
 
-    private String[] makeHistoHeader(Histogram1D histo, String xLabel, boolean showStats) {
+    private String[] makeHistoHeader(final Histogram1D histo, final String xLabel, final boolean showStats) {
 	String yLabel = "Entries per bin";
 	return makeHistoHeader(histo, xLabel, yLabel, showStats);
     }
 
-    private String[] makeHistoHeader(Histogram1D histo, String xLabel, String yLabel) {
+    private String[] makeHistoHeader(final Histogram1D histo, final String xLabel, final String yLabel) {
 	boolean showStats = true;
 	return makeHistoHeader(histo, xLabel, yLabel, showStats);
     }
 
-    private String[] makeHistoHeader(Histogram1D histo, String xLabel, String yLabel, boolean showStats) {
+    private String[] makeHistoHeader(final Histogram1D histo, final String xLabel, final String yLabel, final boolean showStats) {
 	double[] yMinMax = calculateYMinYMax(histo);
 	double yMin = yMinMax[0];
 	double yMax = yMinMax[1];
 	return makeHistoHeader(histo, yMin, yMax, xLabel, yLabel, showStats);
     }
 
-    private String[] makeHistoHeader(Histogram1D histo, String xLabel, String yLabel, String plotLabel) {
+    private String[] makeHistoHeader(final Histogram1D histo, final String xLabel, final String yLabel, final String plotLabel) {
 	boolean showStats = true;
 	return makeHistoHeader(histo, xLabel, yLabel, plotLabel, showStats);
     }
 
-    private String[] makeHistoHeader(Histogram1D histo, String xLabel, String yLabel, String plotLabel, boolean showStats) {
+    private String[] makeHistoHeader(final Histogram1D histo, final String xLabel, final String yLabel, final String plotLabel, final boolean showStats) {
 	double[] yMinMax = calculateYMinYMax(histo);
 	double yMin = yMinMax[0];
 	double yMax = yMinMax[1];
 	return makeHistoHeader(histo, yMin, yMax, xLabel, yLabel, plotLabel, showStats);
     }
 
-    private String[] makeHistoHeader(Histogram1D histo, double yMin, double yMax, String xLabel, boolean showStats) {
+    private String[] makeHistoHeader(final Histogram1D histo, final double yMin, final double yMax, final String xLabel, final boolean showStats) {
 	String yLabel = "Entries per bin";
 	return makeHistoHeader(histo, yMin, yMax, xLabel, yLabel, showStats);
     }
 
-    private String[] makeHistoHeader(Histogram1D histo, double yMin, double yMax, String xLabel, String yLabel, boolean showStats) {
+    private String[] makeHistoHeader(final Histogram1D histo, final double yMin, final double yMax, final String xLabel, final String yLabel, final boolean showStats) {
 	IAxis axis = histo.axis();
 	int nBins = axis.bins();
 	double binWidth = axis.binWidth(0);
@@ -404,7 +437,7 @@ public class AsciiDataFileWriter {
 	return header;
     }
 
-    private String[] makeHistoHeader(Histogram1D histo, double yMin, double yMax, String xLabel, String yLabel,  String plotLabel, boolean showStats) {
+    private String[] makeHistoHeader(final Histogram1D histo, final double yMin, final double yMax, final String xLabel, final String yLabel, final String plotLabel, final boolean showStats) {
 	IAxis axis = histo.axis();
 	int nBins = axis.bins();
 	double binWidth = axis.binWidth(0);
@@ -472,27 +505,27 @@ public class AsciiDataFileWriter {
 	return header;
     }
 
-    private void printToFile(String[] header, double[] binCentres, double[] binHeights) {
+    private void printToFile(final String[] header, final double[] binCentres, final double[] binHeights) {
 	for ( int i=0; i < header.length; i++ ) {
 	    printWriter.println(header[i]);
 	}
 	for ( int i=0; i < binCentres.length; i++ ) {
-	    printWriter.println((binCentres[i]) +"\t"+ (binHeights[i]) +"\t");
+	    printWriter.println((binCentres[i]) +"\t"+ (binHeights[i]));
 	}
 	printWriter.close();
     }
 
-    private void printToFile(String[] header, double[] binCentres, double[] binHeights, DecimalFormat numberFormat) {
+    private void printToFile(final String[] header, final double[] binCentres, final double[] binHeights, DecimalFormat numberFormat) {
 	for ( int i=0; i < header.length; i++ ) {
 	    printWriter.println(header[i]);
 	}
  	for ( int i=0; i < binCentres.length; i++ ) {
-	    printWriter.println(numberFormat.format(binCentres[i]) +"\t"+ numberFormat.format(binHeights[i]) +"\t");
+	    printWriter.println(numberFormat.format(binCentres[i]) +"\t"+ numberFormat.format(binHeights[i]));
 	}
 	printWriter.close();
     }
 
-    private void printToFile(String[] header, double[] binCentres, double[] binHeights, double[] function) {
+    private void printToFile(final String[] header, final double[] binCentres, final double[] binHeights, final double[] function) {
 	for ( int i=0; i < header.length; i++ ) {
 	    printWriter.println(header[i]);
 	}
@@ -505,101 +538,110 @@ public class AsciiDataFileWriter {
 
     // Methods writeData
 
-    public void writeData(String[] header, double[] x, double[] y) throws IOException {
+    public void writeData(final String[] header, final double[] x, final double[] y) throws IOException {
 	for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]);
 	int nbins = (new Double(Math.min(x.length, y.length))).intValue();
 	for ( int i=0; i < nbins; i++ ) {
-	    printWriter.println((x[i]) +"\t"+ (y[i]) +"\t");
+	    printWriter.println((x[i]) +"\t"+ (y[i]));
 	}
 	printWriter.close();
     }
 
-    public void writeData(String[] header, double[] x, double[] y, int startIndex) throws IOException {
+    public void writeData(final String[] header, final double[] x, final double[] y, int startIndex) throws IOException {
 	for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]);
 	int nbins = (new Double(Math.min(x.length, y.length))).intValue();
 	for ( int i=startIndex; i < nbins; i++ ) {
-	    printWriter.println((x[i]) +"\t"+ (y[i]) +"\t");
+	    printWriter.println((x[i]) +"\t"+ (y[i]));
 	}
 	printWriter.close();
     }
 
-    public void writeData(String[] header, int[] x, double[] y) throws IOException {
+    public void writeData(final String[] header, int[] x, final double[] y) throws IOException {
 	for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]);
 	int nbins = (new Double(Math.min(x.length, y.length))).intValue();
 	for ( int i=0; i < nbins; i++ ) {
-	    printWriter.println((x[i]) +"\t"+ (y[i]) +"\t");
+	    printWriter.println((x[i]) +"\t"+ (y[i]));
 	}
 	printWriter.close();
     }
 
-    public void writeData(String[] header, int[] x, int[] y) throws IOException {
+    public void writeData(final String[] header, int[] x, int[] y) throws IOException {
 	for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]);
 	int nbins = (new Double(Math.min(x.length, y.length))).intValue();
 	for ( int i=0; i < nbins; i++ ) {
-	    printWriter.println(x[i] +"\t"+ y[i] +"\t");
+	    printWriter.println(x[i] +"\t"+ y[i]);
 	}
 	printWriter.close();
     }
 
-    public void writeData(String[] header, int[] x, double[] y, double[] y2) throws IOException {
+    public void writeData(final String[] header, int[] x, final double[] y, final double[] y2) throws IOException {
 	for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]);
 	int lengths[] = new int[] {x.length, y.length, y2.length};
 	int nbins = (new Double(MinMax.getMin(lengths))).intValue();
 	for ( int i=0; i < nbins; i++ ) {
-	    printWriter.println((x[i]) +"\t"+ (y[i]) +"\t"+ (y2[i]) +"\t");
+	    printWriter.println((x[i]) +"\t"+ (y[i]) +"\t"+ (y2[i]));
 	}
 	printWriter.close();
     }
 
-    public void writeData(String[] header, int[] x, double[] y, double[] y2, double[] y3) throws IOException {
+    public void writeData(final String[] header, int[] x, final double[] y, final double[] y2, final String[] footer) throws IOException {
+	for (int i=0; i < header.length; i++)  printWriter.println(header[i]);
+	int lengths[] = new int[] {x.length, y.length, y2.length};
+	int nbins = (new Double(MinMax.getMin(lengths))).intValue();
+	for (int i=0; i < nbins; i++) printWriter.println((x[i]) +"\t"+ (y[i]) +"\t"+ (y2[i]));
+	for (int i=0; i < footer.length; i++) printWriter.println(footer[i]);
+	printWriter.close();
+    }
+
+    public void writeData(final String[] header, int[] x, final double[] y, final double[] y2, final double[] y3) throws IOException {
 	for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]);
 	int lengths[] = new int[] {x.length, y.length, y2.length, y3.length};
 	int nbins = (new Double(MinMax.getMin(lengths))).intValue();
 	for ( int i=0; i < nbins; i++ ) {
-	    printWriter.println((x[i]) +"\t"+ (y[i]) +"\t"+ (y2[i]) +"\t"+ (y3[i]) +"\t");
+	    printWriter.println((x[i]) +"\t"+ (y[i]) +"\t"+ (y2[i]) +"\t"+ (y3[i]));
 	}
 	printWriter.close();
     }
 
-    public void writeData(String[] header, int[] x, double[] y, double[] y2, double[] y3, double[] y4) throws IOException {
+    public void writeData(final String[] header, int[] x, final double[] y, final double[] y2, final double[] y3, final double[] y4) throws IOException {
 	for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]);
 	int lengths[] = new int[] {x.length, y.length, y2.length, y3.length, y4.length};
 	int nbins = (new Double(MinMax.getMin(lengths))).intValue();
 	for ( int i=0; i < nbins; i++ ) {
-	    printWriter.println((x[i]) +"\t"+ (y[i]) +"\t"+ (y2[i]) +"\t"+ (y3[i]) +"\t" +(y4[i]) +"\t");
+	    printWriter.println((x[i]) +"\t"+ (y[i]) +"\t"+ (y2[i]) +"\t"+ (y3[i]) +"\t" +(y4[i]));
 	}
 	printWriter.close();
     }
 
-    public void writeData(String[] header, int[] x, double[] y, double[] y2, double[] y3, double[] y4, double[] y5) throws IOException {
+    public void writeData(final String[] header, int[] x, final double[] y, final double[] y2, final double[] y3, final double[] y4, final double[] y5) throws IOException {
 	for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]);
 	int lengths[] = new int[] {x.length, y.length, y2.length, y3.length, y4.length, y5.length};
 	int nbins = (new Double(MinMax.getMin(lengths))).intValue();
 	for ( int i=0; i < nbins; i++ ) {
-	    printWriter.println((x[i]) +"\t"+ (y[i]) +"\t"+ (y2[i]) +"\t"+ (y3[i]) +"\t" +(y4[i]) +"\t" +(y5[i]) +"\t");
+	    printWriter.println((x[i]) +"\t"+ (y[i]) +"\t"+ (y2[i]) +"\t"+ (y3[i]) +"\t" +(y4[i]) +"\t" +(y5[i]));
 	}
 	printWriter.close();
     }
 
-    public void writeData(String[] header, int[] col1, int[] col2, double[] col3) throws IOException {
+    public void writeData(final String[] header, int[] col1, int[] col2, final double[] col3) throws IOException {
 	for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]);
 	int lengths[] = new int[] {col1.length, col2.length, col3.length};
 	int nbins = (new Double(MinMax.getMin(lengths))).intValue();
 	for ( int i=0; i < nbins; i++ ) {
-	    printWriter.println((col1[i]) +"\t"+ (col2[i]) +"\t"+ (col3[i]) +"\t");
+	    printWriter.println((col1[i]) +"\t"+ (col2[i]) +"\t"+ (col3[i]));
 	}
 	printWriter.close();
     }
 
-    public void writeData(String[] header, String[] col1, int[] col2, double[] y) throws IOException {
+    public void writeData(final String[] header, String[] col1, int[] col2, final double[] y) throws IOException {
 	for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]); 
 	for ( int i=0; i < col1.length; i++ ) {
-	    printWriter.println(col1[i] +"\t"+ (col2[i]) +"\t"+ (y[i]) +"\t");
+	    printWriter.println(col1[i] +"\t"+ (col2[i]) +"\t"+ (y[i]));
 	}
 	printWriter.close();
     }
 
-    public void writeData(String[] header, double[] c1, double[] c2, double[] c3) throws IOException {
+    public void writeData(final String[] header, final double[] c1, final double[] c2, final double[] c3) throws IOException {
 	for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]);
 	int lengths[] = new int[] {c1.length, c2.length, c3.length};
 	double var = BasicStats.getVariance(lengths);
@@ -608,12 +650,12 @@ public class AsciiDataFileWriter {
 	}
 	int nbins = (new Double(MinMax.getMin(lengths))).intValue();
 	for ( int i=0; i < nbins; i++ ) {
-	    printWriter.println((c1[i]) +"\t"+ (c2[i]) +"\t"+ (c3[i]) +"\t");
+	    printWriter.println((c1[i]) +"\t"+ (c2[i]) +"\t"+ (c3[i]));
 	}
 	printWriter.close();
     }
 
-    public void writeData(String[] header, double[] c1, double[] c2, double[] c3, double[] c4) throws IOException {
+    public void writeData(final String[] header, final double[] c1, final double[] c2, final double[] c3, final double[] c4) throws IOException {
 	for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]);
 	int lengths[] = new int[] {c1.length, c2.length, c3.length, c4.length};
 	double var = BasicStats.getVariance(lengths);
@@ -623,12 +665,12 @@ public class AsciiDataFileWriter {
 	int nbins = (new Double(MinMax.getMin(lengths))).intValue();
 	for ( int i=0; i < nbins; i++ ) {
 	    printWriter.println((c1[i]) +"\t"+ (c2[i]) +"\t"+ 
-				(c3[i]) +"\t"+ (c4[i]) +"\t");
+				(c3[i]) +"\t"+ (c4[i]));
 	}
 	printWriter.close();
     }
     
-    public void writeData(String[] header, double[] c1, double[] c2, double[] c3, double[] c4, double[] c5) throws IOException {
+    public void writeData(final String[] header, final double[] c1, final double[] c2, final double[] c3, final double[] c4, final double[] c5) throws IOException {
 	for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]);
 	int lengths[] = new int[] {c1.length, c2.length, c3.length, c4.length, c5.length};
 	double var = BasicStats.getVariance(lengths);
@@ -639,12 +681,12 @@ public class AsciiDataFileWriter {
 	for ( int i=0; i < nbins; i++ ) {
 	    printWriter.println((c1[i]) +"\t"+ (c2[i]) +"\t"+ 
 				(c3[i]) +"\t"+ (c4[i]) +"\t"+ 
-				(c5[i]) +"\t");
+				(c5[i]));
 	}
 	printWriter.close();
     }
 
-    public void writeData(String[] header, int[] c1, double[] c2, double[] c3, double[] c4, int[] c5) 	throws IOException {
+    public void writeData(final String[] header, int[] c1, final double[] c2, final double[] c3, final double[] c4, int[] c5) 	throws IOException {
 	for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]);
 	int lengths[] = new int[] {c1.length, c2.length, c3.length, c4.length, c5.length};
 	double var = BasicStats.getVariance(lengths);
@@ -655,12 +697,12 @@ public class AsciiDataFileWriter {
 	for ( int i=0; i < nbins; i++ ) {
 	    printWriter.println((c1[i]) +"\t"+ (c2[i]) +"\t"+ 
 				(c3[i]) +"\t"+ (c4[i]) +"\t"+ 
-				(c5[i]) +"\t");
+				(c5[i]));
 	}
 	printWriter.close();
     }
 
-    public void writeData(String[] header, double[] c1, double[] c2, double[] c3, double[] c4, double[] c5, double[] c6) throws IOException {
+    public void writeData(final String[] header, final double[] c1, final double[] c2, final double[] c3, final double[] c4, final double[] c5, final double[] c6) throws IOException {
 	for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]);
 	int lengths[] = new int[] {c1.length, c2.length, c3.length, c4.length, c5.length, c6.length};
 	double var = BasicStats.getVariance(lengths);
@@ -671,12 +713,12 @@ public class AsciiDataFileWriter {
 	for ( int i=0; i < nbins; i++ ) {
 	    printWriter.println((c1[i]) +"\t"+ (c2[i]) +"\t"+ 
 				(c3[i]) +"\t"+ (c4[i]) +"\t"+
-				(c5[i]) +"\t"+ (c6[i]) +"\t");
+				(c5[i]) +"\t"+ (c6[i]));
 	}
 	printWriter.close();
     }
 
-    public void writeData(String[] header, double[] c1, double[] c2, double[] c3, double[] c4, double[] c5, double[] c6, double[] c7) throws IOException {
+    public void writeData(final String[] header, final double[] c1, final double[] c2, final double[] c3, final double[] c4, final double[] c5, final double[] c6, final double[] c7) throws IOException {
 	for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]);
 	int lengths[] = new int[] {c1.length, c2.length, c3.length, c4.length, c5.length, c6.length, c7.length};
 	double var = BasicStats.getVariance(lengths);
@@ -688,12 +730,12 @@ public class AsciiDataFileWriter {
 	    printWriter.println((c1[i]) +"\t"+ (c2[i]) +"\t"+ 
 				(c3[i]) +"\t"+ (c4[i]) +"\t"+
 				(c5[i]) +"\t"+ (c6[i]) +"\t"+
-				(c7[i]) +"\t");
+				(c7[i]));
 	}
 	printWriter.close();
     }
 
-    public void writeData(String[] header, double[] c1, double[] c2, double[] c3, double[] c4, double[] c5, double[] c6, double[] c7, double[] c8) throws IOException {
+    public void writeData(final String[] header, final double[] c1, final double[] c2, final double[] c3, final double[] c4, final double[] c5, final double[] c6, final double[] c7, final double[] c8) throws IOException {
 	for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]);
 	int lengths[] = new int[] {c1.length, c2.length, c3.length, c4.length, c5.length, c6.length, c7.length, c8.length};
 	double var = BasicStats.getVariance(lengths);
@@ -705,12 +747,12 @@ public class AsciiDataFileWriter {
 	    printWriter.println((c1[i]) +"\t"+ (c2[i]) +"\t"+ 
 				(c3[i]) +"\t"+ (c4[i]) +"\t"+
 				(c5[i]) +"\t"+ (c6[i]) +"\t"+
-				(c7[i]) +"\t"+ (c8[i]) +"\t");
+				(c7[i]) +"\t"+ (c8[i]));
 	}
 	printWriter.close();
     }
 
-    public void writeData(String[] header, double[] c1, double[] c2, double[] c3, double[] c4, double[] c5, double[] c6, double[] c7, double[] c8, double[] c9) throws IOException {
+    public void writeData(final String[] header, final double[] c1, final double[] c2, final double[] c3, final double[] c4, final double[] c5, final double[] c6, final double[] c7, final double[] c8, final double[] c9) throws IOException {
 	for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]);
 	int lengths[] = new int[] {c1.length, c2.length, c3.length, c4.length, c5.length, c6.length, c7.length, c8.length, c9.length};
 	double var = BasicStats.getVariance(lengths);
@@ -723,11 +765,11 @@ public class AsciiDataFileWriter {
 				(c3[i]) +"\t"+ (c4[i]) +"\t"+
 				(c5[i]) +"\t"+ (c6[i]) +"\t"+
 				(c7[i]) +"\t"+ (c8[i]) +"\t"+
-				(c9[i]) +"\t");
+				(c9[i]));
 	}
 	printWriter.close();
     }
-    public void writeData(String[] header, double[] c1, double[] c2, double[] c3, double[] c4, double[] c5, double[] c6, double[] c7, double[] c8, double[] c9, double[] c10) throws IOException {
+    public void writeData(final String[] header, final double[] c1, final double[] c2, final double[] c3, final double[] c4, final double[] c5, final double[] c6, final double[] c7, final double[] c8, final double[] c9, final double[] c10) throws IOException {
 	for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]);
 	int lengths[] = new int[] {c1.length, c2.length, c3.length, c4.length, c5.length, c6.length, c7.length, c8.length, c9.length, c10.length};
 	double var = BasicStats.getVariance(lengths);
@@ -740,12 +782,12 @@ public class AsciiDataFileWriter {
 				(c3[i]) +"\t"+ (c4[i]) +"\t"+
 				(c5[i]) +"\t"+ (c6[i]) +"\t"+
 				(c7[i]) +"\t"+ (c8[i]) +"\t"+
-				(c9[i]) +"\t"+ (c10[i]) +"\t");
+				(c9[i]) +"\t"+ (c10[i]));
 	}
 	printWriter.close();
     }
 
-    public void writeData(String[] header, double[] c1, double[] c2, double[] c3, double[] c4, double[] c5, double[] c6, double[] c7, double[] c8, double[] c9, double[] c10, double[] c11) throws IOException {
+    public void writeData(final String[] header, final double[] c1, final double[] c2, final double[] c3, final double[] c4, final double[] c5, final double[] c6, final double[] c7, final double[] c8, final double[] c9, final double[] c10, final double[] c11) throws IOException {
 	for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]);
 	int lengths[] = new int[] {c1.length, c2.length, c3.length, c4.length, c5.length, c6.length, c7.length, c8.length, c9.length, c10.length, c11.length};
 	double var = BasicStats.getVariance(lengths);
@@ -759,7 +801,7 @@ public class AsciiDataFileWriter {
 				(c5[i]) +"\t"+ (c6[i]) +"\t"+
 				(c7[i]) +"\t"+ (c8[i]) +"\t"+
 				(c9[i]) +"\t"+ (c10[i]) +"\t"+
-				(c11[i]) +"\t");
+				(c11[i]));
 	}
 	printWriter.close();
     }

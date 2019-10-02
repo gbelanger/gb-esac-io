@@ -12,6 +12,9 @@ import java.util.StringTokenizer;
 import cern.colt.list.IntArrayList;
 import org.apache.log4j.Logger;
 
+// @version January 2017
+// Added catch of NullPointerException when reading data in columns
+
 
 public class AsciiDataFileReader {
 
@@ -28,6 +31,8 @@ public class AsciiDataFileReader {
     private String[][] data;
 
     //  Constructors
+    private AsciiDataFileReader() {}
+    
     public AsciiDataFileReader(File file) throws AsciiDataFileFormatException, IOException  {
 	this.file = file;
 	readDataFile();
@@ -62,6 +67,9 @@ public class AsciiDataFileReader {
 	    catch ( NumberFormatException e ) {
 		dblCol[i] = Double.NaN;
 	    }
+	    catch ( NullPointerException e ) {
+		dblCol[i] = Double.NaN;
+	    }
 	}
 	return dblCol;
     }
@@ -74,7 +82,9 @@ public class AsciiDataFileReader {
 		fltCol[i] = (Float.valueOf(col[i])).floatValue();
 	    }
 	    catch ( NumberFormatException e ) {
-		
+		fltCol[i] = Float.NaN;
+	    }
+	    catch ( NullPointerException e ) {
 		fltCol[i] = Float.NaN;
 	    }
 	}
@@ -92,8 +102,10 @@ public class AsciiDataFileReader {
 	    try {
 		intCol[i] = (Integer.valueOf(col[i])).intValue();
 	    }
-	    catch ( NumberFormatException e ) {
-		
+	    catch ( NumberFormatException e ) {		
+		intCol[i] = 0;
+	    }
+	    catch ( NullPointerException e ) {
 		intCol[i] = 0;
 	    }
 	}
