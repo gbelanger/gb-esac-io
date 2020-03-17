@@ -255,14 +255,14 @@ public class AsciiDataFileWriter {
 	    "DEV /XS",
 	    "LAB T", "LAB F",
 	    "TIME OFF",
-	    "LINE ON",
+	    "LINE OFF",
 	    "MA 2 ON", "MA SIZE 1",
 	    "LW 4", "CS 1.5",
 	    "LAB X "+xLabel,
 	    "LAB Y "+yLabel,
 	    "LAB 1 \""+plotLabel+"\" CS 1.3",
 	    "LAB 1 VPOS 0.27 0.8 JUST LEFT",
-	    "VIEW 0.2 0.1 0.8 0.9",
+	    "VIEW 0.1 0.3 0.9 0.7",
 	    "SKIP SINGLE",
 	    "!"
 	};
@@ -274,12 +274,12 @@ public class AsciiDataFileWriter {
 	    "DEV /XS",
 	    "LAB T", "LAB F",
 	    "TIME OFF",
-	    "LINE ON",
+	    "LINE OFF",
 	    "MA 2 ON", "MA SIZE 1",
 	    "LW 4", "CS 1.5",
 	    "LAB X "+xLabel,
 	    "LAB Y "+yLabel,
-	    "VIEW 0.2 0.1 0.8 0.9",
+	    "VIEW 0.1 0.3 0.9 0.7",
 	    "SKIP SINGLE",
 	    "!"
 	};
@@ -293,7 +293,7 @@ public class AsciiDataFileWriter {
 		"TIME OFF",
 		"LINE OFF",
 		"MA 17 ON",
-		"MA SIZE 1.75",
+		"MA SIZE 1.1",
 		"LW 4", "CS 1.3",
 		"VIEW 0.2 0.1 0.8 0.9",
 		"LAB X "+xLabel,
@@ -318,7 +318,7 @@ public class AsciiDataFileWriter {
 		"TIME OFF",
 		"LINE OFF",
 		"MA 17 ON",
-		"MA SIZE 1.75",
+		"MA SIZE 1.1",
 		"LW 4", "CS 1.3",
 		"VIEW 0.2 0.1 0.8 0.9",
 		"LAB X "+xLabel,
@@ -538,13 +538,29 @@ public class AsciiDataFileWriter {
 
     // Methods writeData
 
+    public void writeData(final double[] data) throws IOException {
+		int n = data.length;
+		for ( int i=0; i < n; i++ ) {
+		    printWriter.println(data[i]);
+		}
+		printWriter.close();    	
+    }
+
+    public void writeData(final double[] col1, final double[] col2) throws IOException {
+		int n = (new Double(Math.min(col1.length, col2.length))).intValue();
+		for ( int i=0; i < n; i++ ) {
+		    printWriter.println(col1[i]+"\t"+col2[i]);
+		}
+		printWriter.close();    	
+    }
+
     public void writeData(final String[] header, final double[] x, final double[] y) throws IOException {
-	for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]);
-	int nbins = (new Double(Math.min(x.length, y.length))).intValue();
-	for ( int i=0; i < nbins; i++ ) {
-	    printWriter.println((x[i]) +"\t"+ (y[i]));
-	}
-	printWriter.close();
+		for ( int i=0; i < header.length; i++ )  printWriter.println(header[i]);
+		int nbins = (new Double(Math.min(x.length, y.length))).intValue();
+		for ( int i=0; i < nbins; i++ ) {
+		    printWriter.println((x[i]) +"\t"+ (y[i]));
+		}
+		printWriter.close();
     }
 
     public void writeData(final String[] header, final double[] x, final double[] y, int startIndex) throws IOException {
