@@ -1,0 +1,6 @@
+import cern.colt.list.DoubleArrayList;
+import cern.colt.list.IntArrayList;
+import hep.aida.IAxis;
+import hep.aida.IHistogram1D;
+import hep.aida.ref.histogram.Histogram1D;
+import org.apache.log4j.Logger;
